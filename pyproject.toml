@@ -1,0 +1,65 @@
+[project]
+name = "spatial-notebooks"
+version = "0.1.0"
+description = "Learning notebooks for Python, Jupyter, data analysis, and GIS"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "jupyterlab>=4.3.0",
+    "ipykernel>=6.29.0",
+    "pandas>=2.2.0",
+    "numpy>=2.0.0",
+    "matplotlib>=3.9.0",
+    "plotly>=5.24.0",
+    # GIS stack — used starting Phase 4.
+    "geopandas>=1.0.0",
+    "shapely>=2.0.0",
+    "pyproj>=3.7.0",
+    "folium>=0.17.0",
+]
+
+[project.scripts]
+summarize = "spatial_notebooks.cli:main"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.7.0",
+    "mypy>=1.13.0",
+    "pytest>=8.3.0",
+    "pandas-stubs",
+    "nbqa>=1.9.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/spatial_notebooks"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/spatial_notebooks/py.typed" = "spatial_notebooks/py.typed"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# Notebooks legitimately use a bare expression on the last line to display a value.
+"*.ipynb" = ["B018"]
+
+[tool.mypy]
+python_version = "3.12"
+# Phase 1 Week 2: strict mode on.
+strict = true
+
+[[tool.mypy.overrides]]
+module = ["geopandas.*", "folium.*", "plotly.*", "shapely.*", "pyproj.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
