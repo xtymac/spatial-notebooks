@@ -32,3 +32,4 @@ data/*.gpkg
 .vscode/
 .idea/
 .DS_Store
+gist-nb/
